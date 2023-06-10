@@ -1,21 +1,8 @@
-#include <iostream>
+#include "TaskManager.h"
 
 
 
 
-
-
-
-
-
-int main()
-{
-
-
-
-
-
-
-
-	return 0;
+TaskManager::TaskManager() {
+	categories = std::vector<Category>();
 }
