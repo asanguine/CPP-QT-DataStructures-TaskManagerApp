@@ -132,12 +132,14 @@
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TaskManager.cpp" />
+    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Category.h" />
     <ClInclude Include="Note.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="TaskManager.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

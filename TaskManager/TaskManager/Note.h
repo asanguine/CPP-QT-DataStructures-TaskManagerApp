@@ -18,9 +18,9 @@ public:
         std::string _timestamp = "");
 
     ~Note() {};
-    //Constructors and getters / setters for note properties.
 
 
+    void displayNote();
 
 
 };

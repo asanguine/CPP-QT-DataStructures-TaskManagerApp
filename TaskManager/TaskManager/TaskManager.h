@@ -12,11 +12,20 @@ private:
 
 
 public:
-    //Constructors and functions to manage categories(e.g., addCategory, removeCategory).
-    //Functions to manage tasks across categories(e.g., createTask, updateTask, deleteTask).
+
     
     TaskManager();
 
     ~TaskManager() {};
+
+
+    void addCategory(const Category& category);
+    void removeCategory(const Category& category);
+    Category* getCategoryByName(const std::string& categoryName);
+    void displayCategories() const;
+    void displayTasksByCategory(const std::string& categoryName);
+    void displayCompletedTasks();
+    void displayPendingTasks();
+
 };
 

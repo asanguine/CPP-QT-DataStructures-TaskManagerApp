@@ -13,23 +13,48 @@ private:
     int priority;
     bool completed;
     std::vector<Note> notes;
+    std::string dueDate;
 
 
 public:
 
-    //Constructors and getters / setters for task properties.
-    //Functions to manipulate notes(e.g., addNote, removeNote).
+
     Task(std::string _title = "",
          std::string _description = "",
          std::string _category = "",
          int _priority = 0,
-         bool _completed = false);
+         bool _completed = false,
+         std::string _dueDate = "00/00/0000");
 
     ~Task() {};
 
+    void markAsCompleted();
+    void updatePriority(int newPriority);
+    void displayTaskDetails();
+    bool isCompleted() const;
 
 
 
-
+    bool operator==(const Task& other) const;
+    friend inline std::ostream& operator<<(std::ostream& os, const Task& task);
 };
+
+
+
+
+inline std::ostream& operator<<(std::ostream& os, const Task& task) {
+    os << "Task title: " << task.title << std::endl;
+    os << "due date: " << task.dueDate << std::endl;
+    os << "description: " << task.description << std::endl;
+    return os;
+}
+
+
+
+
+
+
+
+
+
 

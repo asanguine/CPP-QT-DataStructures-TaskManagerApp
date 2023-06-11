@@ -12,12 +12,28 @@ private:
     std::vector<Task> tasks; // A collection of tasks belonging to the category.
 
 public:
-      //Constructors and getters / setters for category properties.
-      //Functions to manage tasks within the category(e.g., addTask, removeTask).
-    Category(std::string _name = "");
 
+    Category(std::string _name = "");
     ~Category() {};
 
 
+    std::string getName() const;
+    void addTask(const Task& task);
+    void removeTask(const Task & task);
+    void displayTasks();
+    
+    const std::vector<Task>& getTasks() const;
+
+    bool operator==(const Category& other) const;
+
+    friend inline std::ostream& operator<<(std::ostream& os, const Category& c);
 };
 
+
+
+
+
+inline std::ostream& operator<<(std::ostream& os, const Category& c) {
+    os << c.getName() << std::endl;
+    return os;
+}
