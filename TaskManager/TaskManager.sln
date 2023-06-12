@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskManager", "TaskManager\TaskManager.vcxproj", "{69878F3B-7650-47F6-AC10-54F8989EAB17}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskManagerUI", "TaskManagerUI\TaskManagerUI.vcxproj", "{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{69878F3B-7650-47F6-AC10-54F8989EAB17}.Release|x64.Build.0 = Release|x64
 		{69878F3B-7650-47F6-AC10-54F8989EAB17}.Release|x86.ActiveCfg = Release|Win32
 		{69878F3B-7650-47F6-AC10-54F8989EAB17}.Release|x86.Build.0 = Release|Win32
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Debug|x64.ActiveCfg = Debug|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Debug|x64.Build.0 = Debug|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Debug|x86.ActiveCfg = Debug|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Debug|x86.Build.0 = Debug|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Release|x64.ActiveCfg = Release|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Release|x64.Build.0 = Release|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Release|x86.ActiveCfg = Release|x64
+		{D09EE1FA-C6E0-49AD-98F8-62B170FB42DC}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
