@@ -28,10 +28,13 @@ public:
 
     ~Task() {};
 
+    std::string getTaskTitle() const;
     void markAsCompleted();
     void updatePriority(int newPriority);
     void displayTaskDetails();
+    void setCompleted(bool setCompleted);
     bool isCompleted() const;
+    int getPriority() const;
 
 
 

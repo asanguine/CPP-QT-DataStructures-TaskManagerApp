@@ -15,6 +15,9 @@ Task::Task(std::string _title,
 							dueDate(_dueDate){}
 
 
+std::string Task::getTaskTitle() const {
+	return title;
+}
 
 
 void Task::markAsCompleted() {
@@ -35,6 +38,17 @@ void Task::displayTaskDetails() {
 bool Task::isCompleted() const {
 	return completed;
 }
+
+
+void Task::setCompleted(bool setCompleted) {
+	completed = setCompleted;
+}
+
+
+int Task::getPriority() const {
+	return priority;
+}
+
 
 bool Task::operator==(const Task& other) const {
 	return (title == other.title &&

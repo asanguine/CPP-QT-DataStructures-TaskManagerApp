@@ -20,17 +20,13 @@ public:
     std::string getName() const;
     void addTask(const Task& task);
     void removeTask(const Task & task);
+    Task* getTaskByName(const std::string& taskName) const;
     void displayTasks();
-    
     const std::vector<Task>& getTasks() const;
 
     bool operator==(const Category& other) const;
-
     friend inline std::ostream& operator<<(std::ostream& os, const Category& c);
 };
-
-
-
 
 
 inline std::ostream& operator<<(std::ostream& os, const Category& c) {

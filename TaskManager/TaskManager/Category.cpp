@@ -42,6 +42,18 @@ const std::vector<Task>& Category::getTasks() const {
 	return tasks;
 }
 
+
+Task* Category::getTaskByName(const std::string& taskName) const{
+	for (const Task& task : tasks) {
+		if (task.getTaskTitle() == taskName) {
+			return const_cast<Task*>(&task);
+		}
+	}
+	return nullptr;
+	throw std::runtime_error("task not found");
+}
+
+
 bool Category::operator==(const Category& other) const {
 	return (name == other.name);
 }

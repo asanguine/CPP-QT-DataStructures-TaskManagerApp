@@ -9,7 +9,7 @@ class TaskManager
 
 private:
     std::vector<Category> categories;
-
+    std::vector<Task> allTasks;
 
 public:
 
@@ -26,6 +26,14 @@ public:
     void displayTasksByCategory(const std::string& categoryName);
     void displayCompletedTasks();
     void displayPendingTasks();
+    void addTaskToCategory(const std::string& categoryName, const Task& task);
+    void removeTaskFromCategory(const std::string& categoryName, const std::string& taskName);
+    
+    void editTask(const std::string& categoryName, const std::string& taskName, const Task& newTask);
+    void markAsCompleted(const std::string& taskName);
+   
+    void mergeSort(); //by priority
+    void merge();
 
 };
 
