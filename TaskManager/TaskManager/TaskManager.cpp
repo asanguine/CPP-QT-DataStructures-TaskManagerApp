@@ -64,6 +64,18 @@ void TaskManager::displayTasksByCategory(const std::string& categoryName) {
 }
 
 
+void TaskManager::displayAllTasks(){
+	for (const Task& task : allTasks) {
+		std::cout << task << std::endl;
+	}
+}
+
+
+std::vector<Task>& TaskManager::getAllTasks() {
+	return allTasks;
+}
+
+
 void TaskManager::displayCompletedTasks() {
 	for (const Category& category : categories) {
 		for (const Task& task : category.getTasks()) {
@@ -96,6 +108,7 @@ void TaskManager::addTaskToCategory(const std::string& categoryName, const Task&
 	category->addTask(task);
 	allTasks.push_back(task);
 }
+
 
 
 void TaskManager::removeTaskFromCategory(const std::string& categoryName, const std::string& taskName) {
@@ -149,11 +162,80 @@ void TaskManager::markAsCompleted(const std::string& taskName) {
 
 
 
-void TaskManager::mergeSort() {
-	
+
+void TaskManager::mergeSort(std::vector<Task>& tasks) {
+	int n; n = tasks.size();
+	if (n < 2) return;
+
+	int mid = n / 2;
+	std::vector<Task> left(mid);
+	std::vector<Task> right(n - mid);
+
+	for (int i = 0; i < mid; i++) {
+		left[i] = tasks[i];
+	}
+	for (int i = mid; i < n; i++) {
+		right[i - mid] = tasks[i];
+	}
+	mergeSort(left);
+	mergeSort(right);
+	mergePriority(left, right, tasks);
 }
 
 
-void TaskManager::merge() {
+void TaskManager::mergePriority(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks) {
+	int leftsize = left.size();
+	int rightsize = right.size();
+	int l = 0, r = 0, i = 0;
 
+	while (l < leftsize && r < rightsize) {
+		if (left[l].getPriority() >= right[r].getPriority()) {
+			tasks[i] = left[l];
+			l++;
+		}
+		else {
+			tasks[i] = right[r];
+			r++;
+		}
+		i++;
+	}
+	while (l < leftsize) {
+		tasks[i] = left[l];
+		l++;
+		i++;
+	}
+	while (r < rightsize) {
+		tasks[i] = right[r];
+		r++;
+		i++;
+	}
+}
+
+
+void TaskManager::mergeDueDate(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks) {
+	int leftsize = left.size();
+	int rightsize = right.size();
+	int l = 0, r = 0, i = 0;
+
+	while (l < leftsize && r < rightsize) {
+		if (left[l].GetdueDateAsInteger() <= right[r].GetdueDateAsInteger()) {
+			tasks[i] = left[l];
+			l++;
+		}
+		else {
+			tasks[i] = right[r];
+			r++;
+		}
+		i++;
+	}
+	while (l < leftsize) {
+		tasks[i] = left[l];
+		l++;
+		i++;
+	}
+	while (r < rightsize) {
+		tasks[i] = right[r];
+		r++;
+		i++;
+	}
 }

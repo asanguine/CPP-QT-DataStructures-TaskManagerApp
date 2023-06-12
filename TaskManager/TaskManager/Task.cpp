@@ -4,15 +4,15 @@
 
 Task::Task(std::string _title,
 	std::string _description,
-	std::string _category,
 	int _priority,
-	bool _completed,
-	std::string _dueDate) : title(_title),
+	std::string _dueDate,
+	std::string _category,
+	bool _completed) : title(_title),
 							description(_description),
-							category(_category),
 							priority(_priority),
-							completed(_completed),
-							dueDate(_dueDate){}
+							dueDate(_dueDate),
+							category(_category),
+							completed(_completed){}
 
 
 std::string Task::getTaskTitle() const {
@@ -53,8 +53,26 @@ int Task::getPriority() const {
 bool Task::operator==(const Task& other) const {
 	return (title == other.title &&
 		description == other.description &&
-		category == other.category &&
 		priority == other.priority &&
-		completed == other.completed &&
-		dueDate == other.dueDate);
+		dueDate == other.dueDate &&
+		category == other.category &&
+		completed == other.completed);
+}
+
+
+int Task::GetdueDateAsInteger() {
+	std::string dayString = dueDate.substr(0, 2);
+	std::string monthString = dueDate.substr(3, 2);
+	std::string yearString = dueDate.substr(6, 4);
+	
+	try {
+		int day = std::stoi(dayString);
+		int month = std::stoi(monthString);
+		int year = std::stoi(yearString);
+		int time = (day) + (month * 31) + (year * 366);
+		return time;
+	}
+	catch (std::exception& e) {
+		std::cout << "error at stoi conversion" << std::endl;
+	}
 }
