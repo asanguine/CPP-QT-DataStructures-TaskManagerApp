@@ -130,7 +130,9 @@
     <ClCompile Include="Category.cpp" />
     <ClCompile Include="Note.cpp" />
     <ClCompile Include="Task.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
     <ClCompile Include="TaskManager.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>

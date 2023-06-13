@@ -162,8 +162,30 @@ void TaskManager::markAsCompleted(const std::string& taskName) {
 
 
 
+void TaskManager::createTask(const std::string& title,
+								const std::string& description,
+								const int& priority,
+								const std::string& dueDate,
+								const std::string& category) {
+	Task task(title, description, priority, dueDate, category, false);
+	allTasks.push_back(task);
+	Category* cat = getCategoryByName(category);
+	cat->addTask(task);
+}
 
-void TaskManager::mergeSort(std::vector<Task>& tasks) {
+
+void TaskManager::removeTask(const std::string& taskname) {
+	for (const Task& task : allTasks) {
+		if (task.getTaskTitle() == taskname) {
+			allTasks.erase(std::remove(allTasks.begin(), allTasks.end(), task), allTasks.end());
+			std::cout << "task: " << taskname << " removed\nshame on you!" << std::endl;
+		}
+	}
+}
+
+
+
+void TaskManager::mergeSortPriority(std::vector<Task>& tasks) {
 	int n; n = tasks.size();
 	if (n < 2) return;
 
@@ -177,11 +199,29 @@ void TaskManager::mergeSort(std::vector<Task>& tasks) {
 	for (int i = mid; i < n; i++) {
 		right[i - mid] = tasks[i];
 	}
-	mergeSort(left);
-	mergeSort(right);
+	mergeSortPriority(left);
+	mergeSortPriority(right);
 	mergePriority(left, right, tasks);
 }
 
+void TaskManager::mergeSortDueDate(std::vector<Task>& tasks) {
+	int n; n = tasks.size();
+	if (n < 2) return;
+
+	int mid = n / 2;
+	std::vector<Task> left(mid);
+	std::vector<Task> right(n - mid);
+
+	for (int i = 0; i < mid; i++) {
+		left[i] = tasks[i];
+	}
+	for (int i = mid; i < n; i++) {
+		right[i - mid] = tasks[i];
+	}
+	mergeSortDueDate(left);
+	mergeSortDueDate(right);
+	mergeDueDate(left, right, tasks);
+}
 
 void TaskManager::mergePriority(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks) {
 	int leftsize = left.size();
@@ -211,7 +251,6 @@ void TaskManager::mergePriority(std::vector<Task>& left, std::vector<Task>& righ
 	}
 }
 
-
 void TaskManager::mergeDueDate(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks) {
 	int leftsize = left.size();
 	int rightsize = right.size();
@@ -239,3 +278,61 @@ void TaskManager::mergeDueDate(std::vector<Task>& left, std::vector<Task>& right
 		i++;
 	}
 }
+
+
+///try template for sorting functions
+/*
+template <typename Compare>
+void TaskManager::mergeSort(std::vector<Task>& tasks, Compare comp) {
+	int n = tasks.size();
+	if (n < 2) return;
+
+	int mid = n / 2;
+	std::vector<Task> left(mid);
+	std::vector<Task> right(n - mid);
+
+	for (int i = 0; i < mid; i++) {
+		left[i] = tasks[i];
+	}
+	for (int i = mid; i < n; i++) {
+		right[i - mid] = tasks[i];
+	}
+	mergeSort(left, comp);
+	mergeSort(right, comp);
+	merge(left, right, tasks, comp);
+}
+
+
+template <typename Compare>
+void TaskManager::merge(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks, Compare comp) {
+	int leftSize = left.size();
+	int rightSize = right.size();
+	int l = 0, r = 0, i = 0;
+
+	while (l < leftSize && r < rightSize) {
+		if (comp(left[l], right[r])) {
+			tasks[i] = left[l];
+			l++;
+		}
+		else {
+			tasks[i] = right[r];
+			r++;
+		}
+		i++;
+	}
+
+	while (l < leftSize) {
+		tasks[i] = left[l];
+		l++;
+		i++;
+	}
+
+	while (r < rightSize) {
+		tasks[i] = right[r];
+		r++;
+		i++;
+	}
+}
+
+*/
+
