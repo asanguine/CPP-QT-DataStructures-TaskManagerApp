@@ -22,7 +22,7 @@ public:
     Task(std::string _title = "",
          std::string _description = "",
          int _priority = 0,
-        std::string _dueDate = "00/00/0000",
+         std::string _dueDate = "00/00/0000",
          std::string _category = "",
          bool _completed = false);
 
@@ -35,7 +35,10 @@ public:
     void setCompleted(bool setCompleted);
     bool isCompleted() const;
     int getPriority() const;
+    std::string getDueDate() const;
     int GetdueDateAsInteger();
+    std::string getTaskDescription() const;
+    std::string getTaskCategory() const;
 
 
     bool operator==(const Task& other) const;

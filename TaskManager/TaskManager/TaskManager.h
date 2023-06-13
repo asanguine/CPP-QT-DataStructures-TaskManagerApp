@@ -21,6 +21,7 @@ public:
     void createTask(const std::string& title, const std::string& description, const int& priority, const std::string& dueDate, const std::string& category);
     void editTask(const std::string& categoryName, const std::string& taskName, const Task& newTask);
     void removeTask(const std::string& taskname);
+    Task* getTaskByTitle(const std::string& title) const;
 
     void addCategory(const Category& category);
     void removeCategory(const Category& category);

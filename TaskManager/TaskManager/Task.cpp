@@ -19,6 +19,17 @@ std::string Task::getTaskTitle() const {
 	return title;
 }
 
+std::string Task::getTaskDescription() const {
+	return description;
+}
+
+std::string Task::getDueDate() const {
+	return dueDate;
+}
+
+std::string Task::getTaskCategory() const {
+	return category;
+}
 
 void Task::markAsCompleted() {
 	completed = true;

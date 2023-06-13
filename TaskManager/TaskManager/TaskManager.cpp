@@ -3,7 +3,7 @@
 
 
 
-TaskManager::TaskManager() {
+TaskManager::TaskManager() : allTasks(){
 	categories = std::vector<Category>();
 }
 
@@ -170,7 +170,10 @@ void TaskManager::createTask(const std::string& title,
 	Task task(title, description, priority, dueDate, category, false);
 	allTasks.push_back(task);
 	Category* cat = getCategoryByName(category);
-	cat->addTask(task);
+	if (cat) {
+		int index = allTasks.size() - 1; // Index of the newly created task
+		cat->addTask(task);
+	}
 }
 
 
@@ -183,6 +186,16 @@ void TaskManager::removeTask(const std::string& taskname) {
 	}
 }
 
+
+Task* TaskManager::getTaskByTitle(const std::string& title) const {
+	for (const Task& task : allTasks) {
+		if (task.getTaskTitle() == title) {
+			return const_cast<Task*>(&task);
+			//return task;
+		}
+	}
+	return nullptr;
+}
 
 
 void TaskManager::mergeSortPriority(std::vector<Task>& tasks) {
