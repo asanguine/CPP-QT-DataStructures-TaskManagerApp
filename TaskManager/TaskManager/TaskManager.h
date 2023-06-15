@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Category.h"
+#include "sqlite/sqlite3.h"
 
 class TaskManager
 {
@@ -13,10 +14,12 @@ private:
 
 public:
 
-    
     TaskManager();
-
     ~TaskManager() {};
+
+    void initializeDatabase();
+    void loadTasksFromDatabase();
+    void updateDatabase();
 
     void createTask(const std::string& title, const std::string& description, const int& priority, const std::string& dueDate, const std::string& category);
     void editTask(const std::string& categoryName, const std::string& taskName, const Task& newTask);
@@ -45,7 +48,9 @@ public:
     void mergePriority(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks);
     void mergeDueDate(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks);
     
-    ///try template for sorting functions
+
+
+    ///try template for sorting functions later
     /*
     template <typename Compare>
     void mergeSort(std::vector<Task>& tasks, Compare comp);

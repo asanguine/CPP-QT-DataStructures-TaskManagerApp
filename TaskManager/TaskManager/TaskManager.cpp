@@ -2,9 +2,10 @@
 
 
 
-
 TaskManager::TaskManager() : allTasks(){
 	categories = std::vector<Category>();
+	initializeDatabase();
+	loadTasksFromDatabase();
 }
 
 
@@ -137,6 +138,8 @@ void TaskManager::editTask(const std::string& categoryName, const std::string& t
 		if (task) {
 			*task = newTask;
 			std::cout << "Task '" << taskName << "' has been updated." << std::endl;
+			
+			updateDatabase(); /// DATABASE 
 		}
 		else {
 			std::cout << "Task '" << taskName << "' does not exist." << std::endl;
@@ -154,10 +157,13 @@ void TaskManager::markAsCompleted(const std::string& taskName) {
 		if (task.getTaskTitle() == taskName) {
 			task.setCompleted(true);
 			std::cout << taskName << " marked as completed" << std::endl;
+
+			updateDatabase(); /// DATABASE
+
 			return;
 		}
 	}
-	
+	std::cout << "Task: " << taskName << " not found." << std::endl;
 }
 
 
@@ -167,6 +173,7 @@ void TaskManager::createTask(const std::string& title,
 								const int& priority,
 								const std::string& dueDate,
 								const std::string& category) {
+	
 	Task task(title, description, priority, dueDate, category, false);
 	allTasks.push_back(task);
 	Category* cat = getCategoryByName(category);
@@ -174,6 +181,8 @@ void TaskManager::createTask(const std::string& title,
 		int index = allTasks.size() - 1; // Index of the newly created task
 		cat->addTask(task);
 	}
+	
+	updateDatabase(); /// DATABASE
 }
 
 
@@ -182,8 +191,11 @@ void TaskManager::removeTask(const std::string& taskname) {
 		if (task.getTaskTitle() == taskname) {
 			allTasks.erase(std::remove(allTasks.begin(), allTasks.end(), task), allTasks.end());
 			std::cout << "task: " << taskname << " removed\nshame on you!" << std::endl;
+			
+			updateDatabase(); /// DATABASE
 		}
 	}
+	std::cout << "Task: " << taskname << " not found." << std::endl;
 }
 
 
@@ -349,3 +361,128 @@ void TaskManager::merge(std::vector<Task>& left, std::vector<Task>& right, std::
 
 */
 
+
+
+
+
+/// DATABASE PART
+
+void TaskManager::loadTasksFromDatabase() {
+	sqlite3* db;
+	int rc = sqlite3_open("tasks.db", &db);
+
+	if (rc) {
+		// Handle the error
+		std::cerr << "Cannot open the database: " << sqlite3_errmsg(db) << std::endl;
+		sqlite3_close(db);
+		return;
+	}
+
+	const char* sql = "SELECT * FROM tasks;";
+	sqlite3_stmt* stmt;
+
+	rc = sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+	if (rc != SQLITE_OK) {
+		// Handle the error
+		std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+		sqlite3_close(db);
+		return;
+	}
+
+	while (sqlite3_step(stmt) == SQLITE_ROW) {
+		int id = sqlite3_column_int(stmt, 0);
+		const unsigned char* title = sqlite3_column_text(stmt, 1);
+		const unsigned char* description = sqlite3_column_text(stmt, 2);
+		int priority = sqlite3_column_int(stmt, 3);
+		const unsigned char* dueDate = sqlite3_column_text(stmt, 4);
+		const unsigned char* category = sqlite3_column_text(stmt, 5);
+		int completed = sqlite3_column_int(stmt, 6);
+
+		std::string titleStr(reinterpret_cast<const char*>(title));
+		std::string descriptionStr(reinterpret_cast<const char*>(description));
+		std::string dueDateStr(reinterpret_cast<const char*>(dueDate));
+		std::string categoryStr(reinterpret_cast<const char*>(category));
+
+		Task task(titleStr, descriptionStr, priority, dueDateStr, categoryStr, completed);
+		allTasks.push_back(task);
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+}
+
+void TaskManager::initializeDatabase() {
+	sqlite3* db;
+	int rc = sqlite3_open("tasks.db", &db);
+
+	if (rc) {
+		// Handle the error
+		std::cerr << "Cannot open the database: " << sqlite3_errmsg(db) << std::endl;
+		sqlite3_close(db);
+		return;
+	}
+
+	const char* sql = "CREATE TABLE IF NOT EXISTS tasks ("
+		"id INTEGER PRIMARY KEY AUTOINCREMENT,"
+		"title TEXT NOT NULL,"
+		"description TEXT,"
+		"priority INTEGER,"
+		"due_date TEXT,"
+		"category TEXT,"
+		"completed INTEGER"
+		");";
+
+	char* errMsg;
+	rc = sqlite3_exec(db, sql, nullptr, nullptr, &errMsg);
+	if (rc != SQLITE_OK) {
+		// Handle the error
+		std::cerr << "SQL error: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+		sqlite3_close(db);
+		return;
+	}
+
+	sqlite3_close(db);
+}
+
+void TaskManager::updateDatabase() {
+	sqlite3* db;
+	int rc = sqlite3_open("tasks.db", &db);
+
+	if (rc) {
+		// Handle the error
+		std::cerr << "Cannot open the database: " << sqlite3_errmsg(db) << std::endl;
+		sqlite3_close(db);
+		return;
+	}
+
+	// Clear the existing tasks in the database
+	std::string clearSql = "DELETE FROM tasks;";
+	char* errMsg;
+	rc = sqlite3_exec(db, clearSql.c_str(), nullptr, nullptr, &errMsg);
+	if (rc != SQLITE_OK) {
+		// Handle the error
+		std::cerr << "SQL error: " << errMsg << std::endl;
+		sqlite3_free(errMsg);
+		sqlite3_close(db);
+		return;
+	}
+
+	// Insert the updated tasks from the allTasks vector
+	for (const Task& task : allTasks) {
+		std::string completedValue = task.isCompleted() ? "1" : "0";
+		std::string sql = "INSERT INTO tasks (title, description, priority, due_date, category, completed) VALUES ('" +
+			task.getTaskTitle() + "', '" + task.getTaskDescription() + "', " +
+			std::to_string(task.getPriority()) + ", '" + task.getDueDate() + "', '" +
+			task.getTaskCategory() + "', " + completedValue + ");";
+
+		rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
+		if (rc != SQLITE_OK) {
+			// Handle the error
+			std::cerr << "SQL error: " << errMsg << std::endl;
+			sqlite3_free(errMsg);
+		}
+	}
+
+	sqlite3_close(db);
+}

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>531</width>
-    <height>646</height>
+    <height>645</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="printAllTasksButton">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>130</y>
+      <x>320</x>
+      <y>20</y>
       <width>171</width>
       <height>24</height>
      </rect>
@@ -72,10 +72,10 @@
       <x>300</x>
       <y>130</y>
       <width>160</width>
-      <height>246</height>
+      <height>312</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="TaskCreateWidget">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -133,6 +133,33 @@
      <item>
       <widget class="QComboBox" name="categoryComboBox"/>
      </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addButton">
+       <property name="text">
+        <string>Add</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QComboBox" name="comboBox">
@@ -150,10 +177,21 @@
      <rect>
       <x>130</x>
       <y>350</y>
-      <width>161</width>
+      <width>131</width>
       <height>211</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>40</y>
+      <width>181</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

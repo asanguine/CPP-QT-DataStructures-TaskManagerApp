@@ -9,14 +9,23 @@ Gui::Gui(QWidget* parent)
 
     defaultCategory = "Default Category";
     ui.categoryComboBox->addItem(defaultCategory);
-    // Connect the "Create Task" button
+
     connect(ui.createTaskButton, &QPushButton::clicked, this, &Gui::handleCreateTaskButtonClicked);
-
-    // Print All Tasks" button connect
     connect(ui.printAllTasksButton, &QPushButton::clicked, this, &Gui::handlePrintAllTasksButtonClicked);
-
-    // Connect the task list item click event
     connect(ui.taskListWidget, &QListWidget::itemClicked, this, &Gui::handleTaskListItemClicked);
+    
+    connect(ui.addButton, &QPushButton::clicked, this, &Gui::handleAddButtonClicked);
+    connect(ui.cancelButton, &QPushButton::clicked, this, &Gui::handleCancelButtonClicked);
+
+
+    ui.titleLineEdit->setPlaceholderText("Title");
+    ui.descriptionLineEdit->setPlaceholderText("Description");
+    ui.dueDateLineEdit->setPlaceholderText("Due date");
+
+    //TaskCreateWidget = findChild<QWidget*>("TaskCreateWidget");
+    TaskCreateWidget = ui.TaskCreateWidget->parentWidget();
+    TaskCreateWidget->setVisible(false);
+    handlePrintAllTasksButtonClicked();
 }
 
 
@@ -27,6 +36,8 @@ Gui::~Gui()
 
 void Gui::handleCreateTaskButtonClicked()
 {
+    TaskCreateWidget->setVisible(!TaskCreateWidget->isVisible());
+    /*
     // Retrieve the values from the input fields/widgets
     const QString title = ui.titleLineEdit->text();
     const QString description = ui.descriptionLineEdit->text();
@@ -34,16 +45,9 @@ void Gui::handleCreateTaskButtonClicked()
     const QString dueDate = ui.dueDateLineEdit->text();
     const QString category = ui.categoryComboBox->currentText();
 
-    /*
-    if (category == defaultCategory) {
-        // Display an error message or handle it appropriately
-        QMessageBox::warning(this, "Error", "Please select a valid category.");
-        return;
-    }*/
-    // Call the createTask function from your TaskManager object
     taskManager.createTask(title.toStdString(), description.toStdString(), priority, dueDate.toStdString(), category.toStdString());
+    */
 }
-
 
 
 
@@ -63,11 +67,11 @@ void Gui::handlePrintAllTasksButtonClicked()
 }
 
 
+
 void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
     QString title = item->text();
     Task* task = taskManager.getTaskByTitle(title.toStdString());
 
-    // Check if the task is valid
     if (task != nullptr) {
         // Create a new dialog to display the task details
         QDialog* taskDialog = new QDialog(this);
@@ -80,6 +84,16 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         QLabel* dueDateLabel = new QLabel("Due Date: " + QString::fromStdString(task->getDueDate()));
         QLabel* categoryLabel = new QLabel("Category: " + QString::fromStdString(task->getTaskCategory()));
 
+        // Create the "Remove Task" button
+        QPushButton* removeTaskButton = new QPushButton("Remove Task");
+        connect(removeTaskButton, &QPushButton::clicked, [=]() {
+            // Remove the task when the button is clicked
+            taskManager.removeTask(task->getTaskTitle());
+            //updateTaskList();
+            handlePrintAllTasksButtonClicked();
+            taskDialog->close();
+            });
+
         // Add labels to the dialog layout
         layout->addWidget(titleLabel);
         layout->addWidget(descriptionLabel);
@@ -87,8 +101,49 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         layout->addWidget(dueDateLabel);
         layout->addWidget(categoryLabel);
 
+        layout->addWidget(removeTaskButton);
+
         // Set the dialog layout and display it
         taskDialog->setLayout(layout);
         taskDialog->exec();
     }
+}
+
+
+
+
+void Gui::handleAddButtonClicked()
+{
+    // Retrieve the values from the input fields/widgets
+    const QString title = ui.titleLineEdit->text();
+    const QString description = ui.descriptionLineEdit->text();
+    const int priority = ui.prioritySpinBox->value();
+    const QString dueDate = ui.dueDateLineEdit->text();
+    const QString category = ui.categoryComboBox->currentText();
+
+    taskManager.createTask(title.toStdString(), description.toStdString(), priority, dueDate.toStdString(), category.toStdString());
+
+    // Clear the input fields
+    ui.titleLineEdit->clear();
+    ui.descriptionLineEdit->clear();
+    ui.prioritySpinBox->setValue(0);
+    ui.dueDateLineEdit->clear();
+    ui.categoryComboBox->setCurrentIndex(0);
+
+    // Hide the TaaskCreateWidget
+    TaskCreateWidget->setVisible(false);
+    handlePrintAllTasksButtonClicked();
+}
+
+void Gui::handleCancelButtonClicked()
+{
+    // Clear the input fields
+    ui.titleLineEdit->clear();
+    ui.descriptionLineEdit->clear();
+    ui.prioritySpinBox->setValue(0);
+    ui.dueDateLineEdit->clear();
+    ui.categoryComboBox->setCurrentIndex(0);
+
+    // Hide the TaaskCreateWidget
+    TaskCreateWidget->setVisible(false);
 }
