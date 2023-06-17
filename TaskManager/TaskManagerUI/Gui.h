@@ -38,5 +38,7 @@ private slots:
    // void editTaskButtonClicked();
    // void editTask(Task* task);
     void openTaskEditDialog(Task* task);
+   
+    ///void handleTaskCheckboxStateChanged(int state);
     void handleSortComboBoxIndexChanged(int index);
 };
