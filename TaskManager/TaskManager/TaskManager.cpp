@@ -11,7 +11,7 @@ TaskManager::TaskManager() : allTasks(){
 
 void TaskManager::addCategory(const Category& category) {
 	for (const auto& c : categories) {
-		if (c.getName() == category.getName()) {
+		if (c.getCategoryName() == category.getCategoryName()) {
 			std::cout << "same category already exists..." << std::endl;
 			return;
 		}
@@ -37,8 +37,8 @@ void TaskManager::removeCategory(const Category& category) {
 
 Category* TaskManager::getCategoryByName(const std::string& categoryName) {
 	for (const Category& c : categories) {
-		if (c.getName() == categoryName) {//name of category
-			std::cout << c.getName() << std::endl;
+		if (c.getCategoryName() == categoryName) {//name of category
+			std::cout << c.getCategoryName() << std::endl;
 			//return &c;
 			return const_cast <Category*>(&c);
 		}
@@ -53,6 +53,13 @@ void TaskManager::displayCategories() const{
 	}
 }
 
+std::vector<std::string> TaskManager::getAllCategoryNames() const {
+	std::vector<std::string> categoryNames;
+	for (const Category& category : categories) {
+		categoryNames.push_back(category.getCategoryName());
+	}
+	return categoryNames;
+}
 
 void TaskManager::displayTasksByCategory(const std::string& categoryName) {
 	Category* category = getCategoryByName(categoryName);
@@ -60,7 +67,7 @@ void TaskManager::displayTasksByCategory(const std::string& categoryName) {
 		std::cout << "Category not found." << std::endl;
 		return;
 	}
-	std::cout << "Tasks in category \n" << category->getName() << "\":" << std::endl;
+	std::cout << "Tasks in category \n" << category->getCategoryName() << "\":" << std::endl;
 	category->displayTasks();
 }
 
@@ -131,23 +138,16 @@ void TaskManager::removeTaskFromCategory(const std::string& categoryName, const 
 }
 
 
-void TaskManager::editTask(const std::string& categoryName, const std::string& taskName, const Task& newTask) {
-	Category* category = getCategoryByName(categoryName);
-	if (category) {
-		Task* task = category->getTaskByName(taskName);
-		if (task) {
-			*task = newTask;
+void TaskManager::editTask(const std::string& taskName, const Task& newTask) {
+	for (Task& task : allTasks) {
+		if (task.getTaskTitle() == taskName) {
+			task = newTask;
 			std::cout << "Task '" << taskName << "' has been updated." << std::endl;
-			
-			updateDatabase(); /// DATABASE 
-		}
-		else {
-			std::cout << "Task '" << taskName << "' does not exist." << std::endl;
+			updateDatabase(); // Update the database
+			return;
 		}
 	}
-	else {
-		std::cout << "Category '" << categoryName << "' does not exist." << std::endl;
-	}
+	std::cout << "Task '" << taskName << "' does not exist." << std::endl;
 }
 
 

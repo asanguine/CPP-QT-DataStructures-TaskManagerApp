@@ -17,7 +17,7 @@ public:
     ~Category() {};
 
 
-    std::string getName() const;
+    std::string getCategoryName() const;
     void addTask(const Task& task);
     void removeTask(const Task & task);
     Task* getTaskByName(const std::string& taskName) const;
@@ -30,6 +30,6 @@ public:
 
 
 inline std::ostream& operator<<(std::ostream& os, const Category& c) {
-    os << c.getName() << std::endl;
+    os << c.getCategoryName() << std::endl;
     return os;
 }

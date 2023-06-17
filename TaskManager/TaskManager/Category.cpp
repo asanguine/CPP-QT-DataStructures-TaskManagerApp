@@ -33,7 +33,7 @@ void Category::displayTasks() {
 
 
 
-std::string Category::getName() const{
+std::string Category::getCategoryName() const{
 	return name;
 }
 

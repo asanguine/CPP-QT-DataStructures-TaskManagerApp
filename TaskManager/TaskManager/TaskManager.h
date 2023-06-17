@@ -22,7 +22,7 @@ public:
     void updateDatabase();
 
     void createTask(const std::string& title, const std::string& description, const int& priority, const std::string& dueDate, const std::string& category);
-    void editTask(const std::string& categoryName, const std::string& taskName, const Task& newTask);
+    void editTask(const std::string& taskName, const Task& newTask);
     void removeTask(const std::string& taskname);
     Task* getTaskByTitle(const std::string& title) const;
 
@@ -30,7 +30,7 @@ public:
     void removeCategory(const Category& category);
     Category* getCategoryByName(const std::string& categoryName);
     void displayCategories() const;
-
+    std::vector<std::string> getAllCategoryNames() const;
     void displayTasksByCategory(const std::string& categoryName);
     void displayAllTasks();
 
