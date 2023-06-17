@@ -17,6 +17,10 @@ Gui::Gui(QWidget* parent)
     connect(ui.addButton, &QPushButton::clicked, this, &Gui::handleAddButtonClicked);
     connect(ui.cancelButton, &QPushButton::clicked, this, &Gui::handleCancelButtonClicked);
 
+    connect(ui.sortComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Gui::handleSortComboBoxIndexChanged);
+    ui.sortComboBox->addItem("By Due Date");
+    ui.sortComboBox->addItem("By Priority");
+    ui.sortComboBox->setPlaceholderText("Sort by");
 
     ui.titleLineEdit->setPlaceholderText("Title");
     ui.descriptionLineEdit->setPlaceholderText("Description");
@@ -84,30 +88,46 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         QLabel* dueDateLabel = new QLabel("Due Date: " + QString::fromStdString(task->getDueDate()));
         QLabel* categoryLabel = new QLabel("Category: " + QString::fromStdString(task->getTaskCategory()));
 
-        // Create the "Remove Task" button
+        // Create the "Edit Task" button
+        QPushButton* editButton = new QPushButton("Edit Task");
         QPushButton* removeTaskButton = new QPushButton("Remove Task");
-        connect(removeTaskButton, &QPushButton::clicked, [=]() {
-            // Remove the task when the button is clicked
+
+        // Connect the "Remove Task" button to the removeTask function
+        connect(removeTaskButton, &QPushButton::clicked, [this, taskDialog, task]() {
             taskManager.removeTask(task->getTaskTitle());
-            //updateTaskList();
             handlePrintAllTasksButtonClicked();
             taskDialog->close();
             });
 
-        // Add labels to the dialog layout
+        // Connect the "Edit Task" button to the handleAddButtonClicked function with pre-filled values
+        connect(editButton, &QPushButton::clicked, [this, taskDialog, task]() {
+            handleAddButtonClicked();
+            ui.titleLineEdit->setText(QString::fromStdString(task->getTaskTitle()));
+            ui.descriptionLineEdit->setText(QString::fromStdString(task->getTaskDescription()));
+            ui.prioritySpinBox->setValue(task->getPriority());
+            ui.dueDateLineEdit->setText(QString::fromStdString(task->getDueDate()));
+            ui.categoryComboBox->setCurrentText(QString::fromStdString(task->getTaskCategory()));
+            taskDialog->close();
+            });
+
+        // Add labels and buttons to the dialog layout
         layout->addWidget(titleLabel);
         layout->addWidget(descriptionLabel);
         layout->addWidget(priorityLabel);
         layout->addWidget(dueDateLabel);
         layout->addWidget(categoryLabel);
-
+        layout->addWidget(editButton);
         layout->addWidget(removeTaskButton);
 
         // Set the dialog layout and display it
         taskDialog->setLayout(layout);
         taskDialog->exec();
+
+        // Clean up the dialog after it is closed
+        taskDialog->deleteLater();
     }
 }
+
 
 
 
@@ -146,4 +166,21 @@ void Gui::handleCancelButtonClicked()
 
     // Hide the TaaskCreateWidget
     TaskCreateWidget->setVisible(false);
+}
+
+
+
+void Gui::handleSortComboBoxIndexChanged(int index)
+{
+    QString selectedSortOption = ui.sortComboBox->currentText();
+    std::vector<Task>& tasks = taskManager.getAllTasks();
+
+    if (selectedSortOption == "By Priority") {
+        taskManager.mergeSortPriority(tasks);
+    }
+    else if (selectedSortOption == "By Due Date") {
+        taskManager.mergeSortDueDate(tasks);
+    }
+
+    handlePrintAllTasksButtonClicked();
 }

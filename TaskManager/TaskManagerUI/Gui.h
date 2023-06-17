@@ -35,4 +35,6 @@ private slots:
 
     void handleAddButtonClicked();
     void handleCancelButtonClicked();
+
+    void handleSortComboBoxIndexChanged(int index);
 };
