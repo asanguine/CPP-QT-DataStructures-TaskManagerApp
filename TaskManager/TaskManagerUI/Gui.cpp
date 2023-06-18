@@ -9,9 +9,11 @@ Gui::Gui(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-
-    defaultCategory = "Default Category";
-    ui.categoryComboBox->addItem(defaultCategory);
+    ///ui.categoryComboBox->addItem(defaultCategory);
+    std::vector<std::string> categoryNames = taskManager.getAllCategoryNames();
+    for (const std::string& categoryName : categoryNames) {
+        ui.categoryComboBox->addItem(QString::fromStdString(categoryName));
+    }
 
     connect(ui.createTaskButton, &QPushButton::clicked, this, &Gui::handleCreateTaskButtonClicked);
     connect(ui.printAllTasksButton, &QPushButton::clicked, this, &Gui::handlePrintAllTasksButtonClicked);
@@ -19,7 +21,8 @@ Gui::Gui(QWidget* parent)
     
     connect(ui.addButton, &QPushButton::clicked, this, &Gui::handleAddButtonClicked);
     connect(ui.cancelButton, &QPushButton::clicked, this, &Gui::handleCancelButtonClicked);
-
+    connect(ui.addCategoryButton, &QPushButton::clicked, this, &Gui::handleAddCategoryButtonClicked);
+    
     connect(ui.sortComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Gui::handleSortComboBoxIndexChanged);
     ui.sortComboBox->addItem("By Due Date");
     ui.sortComboBox->addItem("By Priority");
@@ -28,8 +31,10 @@ Gui::Gui(QWidget* parent)
     ui.titleLineEdit->setPlaceholderText("Title");
     ui.descriptionLineEdit->setPlaceholderText("Description");
     ui.dueDateLineEdit->setPlaceholderText("Due date");
+    ui.categoryComboBox->setPlaceholderText("choose category");
+    ui.categoryLineEdit->setPlaceholderText("type new category");
+    ui.dueDateLineEdit->setPlaceholderText("00/00/0000");
 
-    //TaskCreateWidget = findChild<QWidget*>("TaskCreateWidget");
     TaskCreateWidget = ui.TaskCreateWidget->parentWidget();
     TaskCreateWidget->setVisible(false);
 
@@ -47,6 +52,24 @@ Gui::~Gui()
 void Gui::handleCreateTaskButtonClicked()
 {
     TaskCreateWidget->setVisible(!TaskCreateWidget->isVisible());
+}
+
+
+void Gui::handleAddCategoryButtonClicked()
+{
+
+    QString categoryName = ui.categoryLineEdit->text();
+
+    if (categoryName.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please enter a category name.");
+        return;
+    }
+
+    // Add the category to the combo box
+    ui.categoryComboBox->addItem(categoryName);
+    taskManager.addCategory(categoryName.toStdString());
+    // Clear the category input field
+    ui.categoryLineEdit->clear();
 }
 
 
@@ -193,6 +216,7 @@ void Gui::handleAddButtonClicked()
     const QString category = ui.categoryComboBox->currentText();
 
     taskManager.createTask(title.toStdString(), description.toStdString(), priority, dueDate.toStdString(), category.toStdString());
+    ///taskManager.addCategory(category.toStdString());
 
     // Clear the input fields
     ui.titleLineEdit->clear();
@@ -200,6 +224,13 @@ void Gui::handleAddButtonClicked()
     ui.prioritySpinBox->setValue(0);
     ui.dueDateLineEdit->clear();
     ui.categoryComboBox->setCurrentIndex(0);
+
+    // Update the category combo box
+    ui.categoryComboBox->clear();
+    std::vector<std::string> categories = taskManager.getAllCategoryNames();
+    for (const std::string& category : categories) {
+        ui.categoryComboBox->addItem(QString::fromStdString(category));
+    }
 
     // Hide the TaaskCreateWidget
     TaskCreateWidget->setVisible(false);

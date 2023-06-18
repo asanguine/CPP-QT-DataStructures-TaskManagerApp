@@ -305,64 +305,6 @@ void TaskManager::mergeDueDate(std::vector<Task>& left, std::vector<Task>& right
 }
 
 
-///try template for sorting functions
-/*
-template <typename Compare>
-void TaskManager::mergeSort(std::vector<Task>& tasks, Compare comp) {
-	int n = tasks.size();
-	if (n < 2) return;
-
-	int mid = n / 2;
-	std::vector<Task> left(mid);
-	std::vector<Task> right(n - mid);
-
-	for (int i = 0; i < mid; i++) {
-		left[i] = tasks[i];
-	}
-	for (int i = mid; i < n; i++) {
-		right[i - mid] = tasks[i];
-	}
-	mergeSort(left, comp);
-	mergeSort(right, comp);
-	merge(left, right, tasks, comp);
-}
-
-
-template <typename Compare>
-void TaskManager::merge(std::vector<Task>& left, std::vector<Task>& right, std::vector<Task>& tasks, Compare comp) {
-	int leftSize = left.size();
-	int rightSize = right.size();
-	int l = 0, r = 0, i = 0;
-
-	while (l < leftSize && r < rightSize) {
-		if (comp(left[l], right[r])) {
-			tasks[i] = left[l];
-			l++;
-		}
-		else {
-			tasks[i] = right[r];
-			r++;
-		}
-		i++;
-	}
-
-	while (l < leftSize) {
-		tasks[i] = left[l];
-		l++;
-		i++;
-	}
-
-	while (r < rightSize) {
-		tasks[i] = right[r];
-		r++;
-		i++;
-	}
-}
-
-*/
-
-
-
 
 
 /// DATABASE PART
@@ -430,6 +372,8 @@ void TaskManager::initializeDatabase() {
 		"due_date TEXT,"
 		"category TEXT,"
 		"completed INTEGER"
+		"CREATE TABLE IF NOT EXISTS categories ("
+		"name TEXT PRIMARY KEY"
 		");";
 
 	char* errMsg;

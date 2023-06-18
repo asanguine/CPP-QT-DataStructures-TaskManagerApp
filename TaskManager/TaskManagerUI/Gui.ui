@@ -52,7 +52,7 @@
       <x>300</x>
       <y>130</y>
       <width>160</width>
-      <height>312</height>
+      <height>370</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="TaskCreateWidget">
@@ -112,6 +112,16 @@
      </item>
      <item>
       <widget class="QComboBox" name="categoryComboBox"/>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="categoryLineEdit"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addCategoryButton">
+       <property name="text">
+        <string>Add new category</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="verticalSpacer">
