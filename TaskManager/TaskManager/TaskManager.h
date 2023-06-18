@@ -26,7 +26,7 @@ public:
     void removeTask(const std::string& taskname);
     Task* getTaskByTitle(const std::string& title) const;
 
-    void addCategory(const Category& category);
+    void addCategory(const Category& categoryName);
     void removeCategory(const Category& category);
     Category* getCategoryByName(const std::string& categoryName);
     void displayCategories() const;

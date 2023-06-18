@@ -9,7 +9,7 @@ Gui::Gui(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-    ///ui.categoryComboBox->addItem(defaultCategory);
+    //ui.categoryComboBox->addItem(defaultCategory);
     std::vector<std::string> categoryNames = taskManager.getAllCategoryNames();
     for (const std::string& categoryName : categoryNames) {
         ui.categoryComboBox->addItem(QString::fromStdString(categoryName));
@@ -65,11 +65,21 @@ void Gui::handleAddCategoryButtonClicked()
         return;
     }
 
-    // Add the category to the combo box
+    // Check if the category already exists in the GUI
+    for (int i = 0; i < ui.categoryComboBox->count(); ++i) {
+        if (ui.categoryComboBox->itemText(i) == categoryName) {
+            QMessageBox::warning(this, "Warning", "Category already exists.");
+            return;
+        }
+    }
+
+ 
     ui.categoryComboBox->addItem(categoryName);
-    taskManager.addCategory(categoryName.toStdString());
-    // Clear the category input field
+    Category category(categoryName.toStdString());
+    taskManager.addCategory(category);
     ui.categoryLineEdit->clear();
+    taskManager.updateDatabase();
+    //taskManager.addCategory(categoryName.toStdString());
 }
 
 
