@@ -86,7 +86,6 @@ void Gui::handleAddCategoryButtonClicked()
 
 void Gui::handlePrintAllTasksButtonClicked()
 {
-    // Clear the task list
     ui.taskListWidget->clear();
 
     // Retrieve the tasks from the task manager
@@ -95,6 +94,11 @@ void Gui::handlePrintAllTasksButtonClicked()
     // Iterate over the tasks and add them to the list
     for (const Task& task : tasks) {
         QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(task.getTaskTitle()));
+        if (task.isCompleted()) {
+            QFont font = item->font();
+            font.setStrikeOut(true);
+            item->setFont(font);
+        }
         ui.taskListWidget->addItem(item);
     }
 }
@@ -117,10 +121,21 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         QLabel* dueDateLabel = new QLabel("Due Date: " + QString::fromStdString(task->getDueDate()));
         QLabel* categoryLabel = new QLabel("Category: " + QString::fromStdString(task->getTaskCategory()));
 
+
+        // Apply strike-through effect if the task is completed
+        if (task->isCompleted()) {
+            QFont font = titleLabel->font();
+            font.setStrikeOut(true);
+            titleLabel->setFont(font);
+            descriptionLabel->setFont(font);
+            priorityLabel->setFont(font);
+            dueDateLabel->setFont(font);
+            categoryLabel->setFont(font);
+        }
+
         // Create the "Remove Task" button
         QPushButton* removeTaskButton = new QPushButton("Remove Task");
         connect(removeTaskButton, &QPushButton::clicked, [=]() {
-            // Remove the task when the button is clicked
             taskManager.removeTask(task->getTaskTitle());
             //updateTaskList();
             handlePrintAllTasksButtonClicked();
@@ -130,10 +145,30 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         // Create the "Edit Task" button
         QPushButton* editTaskButton = new QPushButton("Edit Task");
         connect(editTaskButton, &QPushButton::clicked, [=]() {
-            // Open the task edit dialog
             openTaskEditDialog(task);
             taskDialog->close();
             });
+
+        // Create the "Mark as Completed" checkbox
+        QCheckBox* markCompletedCheckbox = new QCheckBox("Mark as Completed");
+        markCompletedCheckbox->setChecked(task->isCompleted()); // Initialize checkbox state
+        connect(markCompletedCheckbox, &QCheckBox::stateChanged, [=](int state) {
+            // Update the task's completion status when the checkbox state changes
+            task->setCompleted(state == Qt::Checked);
+
+            // Apply or remove strike-through effect based on completion status
+            QFont font = titleLabel->font();
+            font.setStrikeOut(task->isCompleted());
+            titleLabel->setFont(font);
+            descriptionLabel->setFont(font);
+            priorityLabel->setFont(font);
+            dueDateLabel->setFont(font);
+            categoryLabel->setFont(font);
+
+            taskManager.updateDatabase(); // Update the database
+            });
+
+
 
         layout->addWidget(editTaskButton);
 
@@ -142,6 +177,7 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         layout->addWidget(descriptionLabel);
         layout->addWidget(priorityLabel);
         layout->addWidget(dueDateLabel);
+        layout->addWidget(markCompletedCheckbox);
         layout->addWidget(categoryLabel);
         layout->addWidget(removeTaskButton);
         layout->addWidget(editTaskButton);
@@ -149,6 +185,8 @@ void Gui::handleTaskListItemClicked(QListWidgetItem* item) {
         // Set the dialog layout and display it
         taskDialog->setLayout(layout);
         taskDialog->exec();
+
+        handlePrintAllTasksButtonClicked();
     }
 }
 
