@@ -1,5 +1,5 @@
 #include "Gui.h"
-#include <QDialog> // Include the header for QDialog
+#include <QDialog>
 #include <QMessageBox>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -9,11 +9,12 @@ Gui::Gui(QWidget* parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-    //ui.categoryComboBox->addItem(defaultCategory);
+
     std::vector<std::string> categoryNames = taskManager.getAllCategoryNames();
     for (const std::string& categoryName : categoryNames) {
         ui.categoryComboBox->addItem(QString::fromStdString(categoryName));
     }
+
 
     connect(ui.createTaskButton, &QPushButton::clicked, this, &Gui::handleCreateTaskButtonClicked);
     connect(ui.printAllTasksButton, &QPushButton::clicked, this, &Gui::handlePrintAllTasksButtonClicked);
@@ -34,7 +35,7 @@ Gui::Gui(QWidget* parent)
     ui.categoryComboBox->setPlaceholderText("choose category");
     ui.categoryLineEdit->setPlaceholderText("type new category");
     ui.dueDateLineEdit->setPlaceholderText("00/00/0000");
-
+    
     TaskCreateWidget = ui.TaskCreateWidget->parentWidget();
     TaskCreateWidget->setVisible(false);
 
@@ -52,6 +53,7 @@ Gui::~Gui()
 void Gui::handleCreateTaskButtonClicked()
 {
     TaskCreateWidget->setVisible(!TaskCreateWidget->isVisible());
+    ui.dueDateLineEdit->setText("00/00/0000");
 }
 
 
@@ -270,7 +272,7 @@ void Gui::handleAddButtonClicked()
     ui.titleLineEdit->clear();
     ui.descriptionLineEdit->clear();
     ui.prioritySpinBox->setValue(0);
-    ui.dueDateLineEdit->clear();
+    ui.dueDateLineEdit->setText("00/00/0000");
     ui.categoryComboBox->setCurrentIndex(0);
 
     // Update the category combo box

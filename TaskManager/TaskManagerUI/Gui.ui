@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>624</height>
+    <width>309</width>
+    <height>426</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,8 +36,8 @@
    <widget class="QPushButton" name="createTaskButton">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>290</y>
+      <x>0</x>
+      <y>1</y>
       <width>131</width>
       <height>24</height>
      </rect>
@@ -49,8 +49,8 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>130</y>
+      <x>140</x>
+      <y>0</y>
       <width>160</width>
       <height>370</height>
      </rect>
@@ -155,18 +155,18 @@
    <widget class="QListWidget" name="taskListWidget">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>350</y>
+      <x>0</x>
+      <y>61</y>
       <width>131</width>
-      <height>211</height>
+      <height>301</height>
      </rect>
     </property>
    </widget>
    <widget class="QComboBox" name="sortComboBox">
     <property name="geometry">
      <rect>
-      <x>128</x>
-      <y>320</y>
+      <x>0</x>
+      <y>31</y>
       <width>131</width>
       <height>22</height>
      </rect>
@@ -175,8 +175,8 @@
    <widget class="QScrollBar" name="verticalScrollBar">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>359</y>
+      <x>110</x>
+      <y>70</y>
       <width>20</width>
       <height>191</height>
      </rect>
@@ -191,7 +191,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>485</width>
+     <width>309</width>
      <height>22</height>
     </rect>
    </property>

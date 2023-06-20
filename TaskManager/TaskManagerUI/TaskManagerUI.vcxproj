@@ -64,6 +64,13 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);sqlite3.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>D:\Creations\code\GITHUB\TaskManager\TaskManager\TaskManagerUI\sqlite;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);$(Qt_LIBS_);sqlite3.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>

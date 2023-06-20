@@ -126,6 +126,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);sqlite3.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Creations\code\GITHUB\TaskManager\TaskManager\TaskManager\sqlite;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

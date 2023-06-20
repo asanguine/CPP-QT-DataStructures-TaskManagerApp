@@ -10,7 +10,7 @@
 #include "sqlite/sqlite3.h"
 
 
-class QDialog; // Forward declaration of QDialog
+class QDialog;
 
 
 class Gui : public QMainWindow
@@ -35,12 +35,10 @@ private slots:
 
     void handleAddButtonClicked();
     void handleCancelButtonClicked();
-   // void editTaskButtonClicked();
-   // void editTask(Task* task);
+
     void openTaskEditDialog(Task* task);
 
     void handleAddCategoryButtonClicked();
    
-    ///void handleTaskCheckboxStateChanged(int state);
     void handleSortComboBoxIndexChanged(int index);
 };
